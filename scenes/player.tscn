@@ -7,7 +7,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_yqjtg"]
 radius = 13.038404
 
-[node name="player" type="CharacterBody2D" unique_id=565558282]
+[node name="player" type="CharacterBody2D" unique_id=565558282 groups=["player"]]
 collision_mask = 10
 motion_mode = 1
 script = ExtResource("1_g2els")

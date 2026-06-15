@@ -2,13 +2,23 @@ extends CharacterBody2D
 
 enum InputMode { KEYBOARD_MOUSE, CONTROLLER }
 
-var move_speed: float = 300.0
+@export var move_speed: float = 400.0
 var screen_size: Vector2
 var input_mode: InputMode = InputMode.KEYBOARD_MOUSE
 
 const STICK_DEADZONE: float = 0.2
 const STICK_ROTATION_BASE: float = 12.0
 const STICK_ROTATION_MAX: float = 40.0
+
+# --- HEALTH & DAMAGE ---
+@export var max_health: int = 5
+var current_health: int
+
+var is_invincible: bool = false
+var invincibility_time: float = 1.0  # 1 second of safety after getting hit
+var invincibility_timer: float = 0.0
+
+@onready var sprite: Sprite2D = $Sprite2D  # Ensure your sprite node is named "Sprite2D"
 
 # Tune this if the ship still faces the wrong direction:
 # PI / 2.0  = sprite faces UP in texture   (most likely for you)
@@ -30,6 +40,7 @@ var aim_direction: Vector2 = Vector2.UP
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	rotation = aim_direction.angle() + SPRITE_OFFSET
+	current_health = max_health  
 
 func _input(event: InputEvent) -> void:
 	# If a Mouse or Keyboard is touched
@@ -44,6 +55,11 @@ func _input(event: InputEvent) -> void:
 		input_mode = InputMode.CONTROLLER
 
 func _physics_process(delta: float) -> void:
+	if is_invincible:
+		invincibility_timer -= delta
+		if invincibility_timer <= 0.0:
+			is_invincible = false
+			sprite.modulate = Color.WHITE  # Return to normal color
 	_handle_movement()
 	_handle_aim(delta)
 	move_and_slide()
@@ -142,3 +158,28 @@ func _wrap() -> void:
 	if wrapped:
 		global_position = pos
 		reset_physics_interpolation()
+
+func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
+	# Ignore the bullet if we are currently invincible
+	if is_invincible:
+		return
+
+	current_health -= amount
+	
+	if current_health <= 0:
+		_die()
+	else:
+		# 1. Trigger I-Frames
+		is_invincible = true
+		invincibility_timer = invincibility_time
+		
+		# 2. Visual Feedback (Flash red, then stay semi-transparent while invincible)
+		if sprite:
+			sprite.modulate = Color.RED
+			var tween = create_tween()
+			# Fade from Red to 50% transparent White over 0.2 seconds
+			tween.tween_property(sprite, "modulate", Color(1.0, 1.0, 1.0, 0.5), 0.2)
+
+func _die() -> void:
+	# For now, immediately reload the prototype level so you can keep testing!
+	get_tree().reload_current_scene()

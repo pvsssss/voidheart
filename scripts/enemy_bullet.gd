@@ -23,8 +23,9 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 func _on_body_entered(body: Node) -> void:
-	# Now we pass BOTH the damage and the bullet's travel direction!
+	# Check if the object we hit has the take_damage function (like our enemy does)
 	if body.has_method("take_damage"):
-		body.take_damage(damage, direction)
+		body.take_damage(damage)
 	
+	# Destroy the bullet after it hits something
 	queue_free()

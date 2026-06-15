@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dfx1w6qd4uq14"]
+
+[ext_resource type="Script" uid="uid://qeidql6y6oht" path="res://scripts/basic_fighter.gd" id="1_0blki"]
+[ext_resource type="Texture2D" uid="uid://h62bcx8h3rrc" path="res://assets/Ship/5.png" id="2_iujc2"]
+[ext_resource type="PackedScene" uid="uid://culpl1s5kvrwk" path="res://scenes/enemy_bullet.tscn" id="2_qdv2r"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qdv2r"]
+radius = 12.5
+height = 38.0
+
+[node name="BasicFighter" type="CharacterBody2D" unique_id=790397415]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_0blki")
+speed = 120.0
+enemy_bullet_scene = ExtResource("2_qdv2r")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1324903092]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_iujc2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1799365461]
+position = Vector2(-0.5, -4)
+shape = SubResource("CapsuleShape2D_qdv2r")
+
+[node name="Muzzle" type="Marker2D" parent="." unique_id=4799749]
+position = Vector2(-4, 20)

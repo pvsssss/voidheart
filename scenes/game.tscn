@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ddmicp10vw1jo" path="res://scenes/foreground.tscn" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://jm7jhu5ie5xa" path="res://scenes/camera_2d.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://b3aufiksotxlg" path="res://scenes/bullet.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://dfx1w6qd4uq14" path="res://scenes/basic_fighter.tscn" id="6_p57ef"]
 
 [node name="Game" type="Node2D" unique_id=476711454]
 
@@ -25,3 +26,9 @@ rotation_smoothing_enabled = false
 [node name="Projectiles" type="Node2D" parent="." unique_id=1076277030]
 
 [node name="Bullet" parent="Projectiles" unique_id=890055396 instance=ExtResource("5_iywne")]
+
+[node name="BasicFighter2" parent="." unique_id=790397415 instance=ExtResource("6_p57ef")]
+position = Vector2(333, 238)
+
+[node name="BasicFighter" parent="." unique_id=458251542 instance=ExtResource("6_p57ef")]
+position = Vector2(544, 111)
