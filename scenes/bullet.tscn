@@ -7,13 +7,17 @@
 radius = 6.0
 
 [node name="Bullet" type="Area2D" unique_id=890055396]
+collision_layer = 4
+collision_mask = 2
 script = ExtResource("1_y25gk")
+speed = 700.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1941612337]
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_l5glv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1600485417]
+visibility_layer = 2
 position = Vector2(0, -1)
 shape = SubResource("CircleShape2D_eoqba")
 

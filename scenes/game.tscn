@@ -22,4 +22,6 @@ position = Vector2(130, 250)
 position_smoothing_enabled = false
 rotation_smoothing_enabled = false
 
-[node name="Bullet" parent="." unique_id=890055396 instance=ExtResource("5_iywne")]
+[node name="Projectiles" type="Node2D" parent="." unique_id=1076277030]
+
+[node name="Bullet" parent="Projectiles" unique_id=890055396 instance=ExtResource("5_iywne")]

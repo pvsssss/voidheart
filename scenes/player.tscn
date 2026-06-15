@@ -8,19 +8,21 @@
 radius = 13.038404
 
 [node name="player" type="CharacterBody2D" unique_id=565558282]
+collision_mask = 10
 motion_mode = 1
 script = ExtResource("1_g2els")
 bullet_scene = ExtResource("2_dqkch")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1241172193]
 texture = ExtResource("2_qhqgy")
+region_rect = Rect2(-0.5, -0.5, 0, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=852287155]
 shape = SubResource("CircleShape2D_yqjtg")
 
-[node name="Muzzle" type="Marker2D" parent="." unique_id=1075812903]
+[node name="MuzzleLeft" type="Marker2D" parent="." unique_id=1075812903]
 position = Vector2(-12, -12)
 
-[node name="Muzzle2" type="Marker2D" parent="." unique_id=3802557]
+[node name="MuzzleRight" type="Marker2D" parent="." unique_id=3802557]
 position = Vector2(12, -12)
 scale = Vector2(1.15, 1.15)
