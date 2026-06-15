@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://b04fs3ysxo7ak"]
+
+[ext_resource type="PackedScene" uid="uid://c3rswad13toa1" path="res://scenes/player.tscn" id="1_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://db5obc2xfuoxm" path="res://scenes/background.tscn" id="2_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://ddmicp10vw1jo" path="res://scenes/foreground.tscn" id="3_iywne"]
+[ext_resource type="PackedScene" uid="uid://jm7jhu5ie5xa" path="res://scenes/camera_2d.tscn" id="4_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://b3aufiksotxlg" path="res://scenes/bullet.tscn" id="5_iywne"]
+
+[node name="Game" type="Node2D" unique_id=476711454]
+
+[node name="player" parent="." unique_id=565558282 instance=ExtResource("1_lnu2h")]
+z_index = 5
+position = Vector2(138, 241)
+
+[node name="background" parent="." unique_id=1712399270 instance=ExtResource("2_lbhrr")]
+
+[node name="foreground" parent="." unique_id=1462943303 instance=ExtResource("3_iywne")]
+scroll_offset = Vector2(-957, 0)
+
+[node name="Camera2D" parent="." unique_id=1487218477 instance=ExtResource("4_lbhrr")]
+position = Vector2(130, 250)
+position_smoothing_enabled = false
+rotation_smoothing_enabled = false
+
+[node name="Bullet" parent="." unique_id=890055396 instance=ExtResource("5_iywne")]

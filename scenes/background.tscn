@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://db5obc2xfuoxm"]
+
+[ext_resource type="Texture2D" uid="uid://dok641ilb6lng" path="res://assets/Background/Space Background (8).png" id="1_bkp1e"]
+
+[node name="background" type="Parallax2D" unique_id=1712399270]
+z_index = -1
+repeat_size = Vector2(960, 0)
+autoscroll = Vector2(10, 0)
+repeat_times = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1820416564]
+position = Vector2(480, 240)
+rotation = 1.5707964
+texture = ExtResource("1_bkp1e")
