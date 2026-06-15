@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dbsjrth07c14s"]
+
+[ext_resource type="Script" uid="uid://cqh3534hsoda" path="res://scripts/hud.gd" id="1_6fi6k"]
+[ext_resource type="Texture2D" uid="uid://dvypxp4feggm7" path="res://assets/HUD/HBcolor.png" id="2_6fi6k"]
+[ext_resource type="Texture2D" uid="uid://c6jk033smpacp" path="res://assets/HUD/HealthBar.png" id="3_047uy"]
+[ext_resource type="Texture2D" uid="uid://c24tq20l58ug6" path="res://assets/HUD/HealthBarColor.png" id="4_5pdws"]
+
+[node name="HUD" type="CanvasLayer" unique_id=212364718]
+script = ExtResource("1_6fi6k")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1801192969]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer" unique_id=1469322163]
+layout_mode = 2
+max_value = 5.0
+texture_under = ExtResource("2_6fi6k")
+texture_over = ExtResource("3_047uy")
+texture_progress = ExtResource("4_5pdws")

@@ -1,22 +1,28 @@
 [gd_scene format=3 uid="uid://b04fs3ysxo7ak"]
 
+[ext_resource type="Script" uid="uid://b5684pq7s06yg" path="res://scripts/game.gd" id="1_gee14"]
 [ext_resource type="PackedScene" uid="uid://c3rswad13toa1" path="res://scenes/player.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://db5obc2xfuoxm" path="res://scenes/background.tscn" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://ddmicp10vw1jo" path="res://scenes/foreground.tscn" id="3_iywne"]
 [ext_resource type="PackedScene" uid="uid://jm7jhu5ie5xa" path="res://scenes/camera_2d.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://b3aufiksotxlg" path="res://scenes/bullet.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://dfx1w6qd4uq14" path="res://scenes/basic_fighter.tscn" id="6_p57ef"]
+[ext_resource type="PackedScene" uid="uid://dbsjrth07c14s" path="res://scenes/hud.tscn" id="7_u5sy4"]
 
 [node name="Game" type="Node2D" unique_id=476711454]
+script = ExtResource("1_gee14")
 
 [node name="player" parent="." unique_id=565558282 instance=ExtResource("1_lnu2h")]
 z_index = 5
 position = Vector2(138, 241)
 
 [node name="background" parent="." unique_id=1712399270 instance=ExtResource("2_lbhrr")]
+scale = Vector2(1.1, 1.1)
+scroll_offset = Vector2(0, -20)
 
 [node name="foreground" parent="." unique_id=1462943303 instance=ExtResource("3_iywne")]
-scroll_offset = Vector2(-957, 0)
+scale = Vector2(1.1, 1.1)
+scroll_offset = Vector2(-957, -20)
 
 [node name="Camera2D" parent="." unique_id=1487218477 instance=ExtResource("4_lbhrr")]
 position = Vector2(130, 250)
@@ -26,9 +32,14 @@ rotation_smoothing_enabled = false
 [node name="Projectiles" type="Node2D" parent="." unique_id=1076277030]
 
 [node name="Bullet" parent="Projectiles" unique_id=890055396 instance=ExtResource("5_iywne")]
+position = Vector2(-22, -9)
 
 [node name="BasicFighter2" parent="." unique_id=790397415 instance=ExtResource("6_p57ef")]
 position = Vector2(333, 238)
 
 [node name="BasicFighter" parent="." unique_id=458251542 instance=ExtResource("6_p57ef")]
 position = Vector2(544, 111)
+
+[node name="HUD" parent="." unique_id=212364718 instance=ExtResource("7_u5sy4")]
+offset = Vector2(3, 3)
+transform = Transform2D(1, 0, 0, 1, 3, 3)

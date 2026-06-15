@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 enum InputMode { KEYBOARD_MOUSE, CONTROLLER }
 
+signal health_changed(current_health: int, max_health: int)
+
 @export var move_speed: float = 400.0
 var screen_size: Vector2
 var input_mode: InputMode = InputMode.KEYBOARD_MOUSE
@@ -37,10 +39,13 @@ var fire_from_left: bool = true
 
 var aim_direction: Vector2 = Vector2.UP
 
+var knockback_velocity: Vector2 = Vector2.ZERO
+
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	rotation = aim_direction.angle() + SPRITE_OFFSET
 	current_health = max_health  
+	health_changed.emit(current_health, max_health)
 
 func _input(event: InputEvent) -> void:
 	# If a Mouse or Keyboard is touched
@@ -53,19 +58,22 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventJoypadMotion and abs(event.axis_value) < STICK_DEADZONE:
 			return
 		input_mode = InputMode.CONTROLLER
-
+		
 func _physics_process(delta: float) -> void:
 	if is_invincible:
 		invincibility_timer -= delta
 		if invincibility_timer <= 0.0:
 			is_invincible = false
-			sprite.modulate = Color.WHITE  # Return to normal color
-	_handle_movement()
+			sprite.modulate = Color.WHITE
+
+	# The outdated _detect_input_mode() line has been removed from here!
+	
+	_handle_movement(delta)
 	_handle_aim(delta)
 	move_and_slide()
 	_wrap()
-	_handle_shoot(delta) 
-
+	_handle_shoot(delta)
+	
 func _handle_shoot(delta: float) -> void:
 	fire_timer -= delta
 	if Input.is_action_pressed("shoot") and fire_timer <= 0.0:
@@ -100,12 +108,17 @@ func _fire() -> void:
 	# 4. Initialize the bullet
 	bullet.init(spawn_pos, aim_direction)
 
-func _handle_movement() -> void:
+func _handle_movement(delta: float) -> void:
 	var direction := Vector2(
 		Input.get_action_strength("right") - Input.get_action_strength("left"),
 		Input.get_action_strength("down") - Input.get_action_strength("up")
-	)
-	velocity = direction.normalized() * move_speed
+	).normalized()
+	
+	var desired_velocity = direction * move_speed
+
+	# Smoothly blend the current velocity toward our desired velocity!
+	# (Lower this 10.0 to make it slide more like Asteroids, raise it to make it snappier)
+	velocity = velocity.lerp(desired_velocity, 10.0 * delta)
 
 func _handle_aim(delta: float) -> void:
 	match input_mode:
@@ -160,24 +173,28 @@ func _wrap() -> void:
 		reset_physics_interpolation()
 
 func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
-	# Ignore the bullet if we are currently invincible
 	if is_invincible:
 		return
 
 	current_health -= amount
+	health_changed.emit(current_health, max_health)
+	
+	# 1. APPLY KNOCKBACK (Shove the player violently in the bullet's direction)
+	velocity += knockback_dir * 1500.0 
+	
+	# 2. TRIGGER CAMERA SHAKE (We will create this node in the next step!)
+	var current_camera = get_viewport().get_camera_2d()
+	if current_camera and current_camera.has_method("apply_shake"):
+		current_camera.apply_shake(20.0)
 	
 	if current_health <= 0:
 		_die()
 	else:
-		# 1. Trigger I-Frames
 		is_invincible = true
 		invincibility_timer = invincibility_time
-		
-		# 2. Visual Feedback (Flash red, then stay semi-transparent while invincible)
 		if sprite:
 			sprite.modulate = Color.RED
 			var tween = create_tween()
-			# Fade from Red to 50% transparent White over 0.2 seconds
 			tween.tween_property(sprite, "modulate", Color(1.0, 1.0, 1.0, 0.5), 0.2)
 
 func _die() -> void:

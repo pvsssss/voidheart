@@ -94,13 +94,22 @@ func _physics_process(delta: float) -> void:
 			if state_timer <= 0.0:
 				current_state = State.BURST
 				burst_shots_fired = 0
-				# INCREASED DELAY: 1.5 second breather before the next burst starts (was 0.5)
 				shoot_timer = 1.5  
 				orbit_direction *= -1.0 # Flip orbit direction for unpredictability
 				
 	# Apply smooth inertia
 	velocity = velocity.lerp(desired_velocity, 5.0 * delta)
 	move_and_slide()
+	
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		# If the thing we hit was the player, bounce off them!
+		if collider and collider.is_in_group("player"):
+			# get_normal() pushes the enemy perfectly away from the collision point
+			velocity += collision.get_normal() * 400.0
+	
 
 func _fire_bullet() -> void:
 	if not enemy_bullet_scene:

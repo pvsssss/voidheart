@@ -11,6 +11,7 @@ radius = 13.038404
 collision_mask = 10
 motion_mode = 1
 script = ExtResource("1_g2els")
+move_speed = 450.0
 bullet_scene = ExtResource("2_dqkch")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1241172193]
