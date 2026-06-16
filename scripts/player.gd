@@ -8,6 +8,9 @@ signal health_changed(current_health: int, max_health: int)
 var screen_size: Vector2
 var input_mode: InputMode = InputMode.KEYBOARD_MOUSE
 
+@onready var shoot_sound: AudioStreamPlayer = $ShootSound
+@onready var hit_sound: AudioStreamPlayer = $HitSound
+
 const STICK_DEADZONE: float = 0.2
 const STICK_ROTATION_BASE: float = 12.0
 const STICK_ROTATION_MAX: float = 40.0
@@ -38,6 +41,7 @@ var aim_direction: Vector2 = Vector2.UP
 var input_velocity: Vector2 = Vector2.ZERO
 var knockback_velocity: Vector2 = Vector2.ZERO
 var target_knockback: Vector2 = Vector2.ZERO  
+
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	rotation = aim_direction.angle() + SPRITE_OFFSET
@@ -104,6 +108,7 @@ func _fire() -> void:
 		get_tree().current_scene.add_child(bullet)
 		
 	bullet.init(spawn_pos, aim_direction)
+	shoot_sound.play()
 
 func _handle_movement(delta: float) -> void:
 	var direction := Vector2(
@@ -170,7 +175,7 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 
 	current_health -= amount
 	health_changed.emit(current_health, max_health)
-	
+	hit_sound.play()
 	# IMPROVEMENT 4: Apply the massive push entirely to the separate knockback_velocity variable
 	knockback_velocity = knockback_dir * 1200.0 
 	

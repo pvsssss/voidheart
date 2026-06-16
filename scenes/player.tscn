@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://hh6q61a31cgo" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://b3aufiksotxlg" path="res://scenes/bullet.tscn" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://b4ctmvtji46ib" path="res://assets/Ship/player.png" id="2_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://bhiclwbhyggpv" path="res://assets/Sound/laserShoot.wav" id="4_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://5wnbwarjv7xv" path="res://assets/Sound/hitHurt.wav" id="5_qlg0r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yqjtg"]
 radius = 13.038404
@@ -27,3 +29,11 @@ position = Vector2(-12, -12)
 [node name="MuzzleRight" type="Marker2D" parent="." unique_id=3802557]
 position = Vector2(12, -12)
 scale = Vector2(1.15, 1.15)
+
+[node name="ShootSound" type="AudioStreamPlayer" parent="." unique_id=466281274]
+stream = ExtResource("4_qlg0r")
+volume_db = -9.115
+
+[node name="HitSound" type="AudioStreamPlayer" parent="." unique_id=583779676]
+stream = ExtResource("5_qlg0r")
+volume_db = -7.373
