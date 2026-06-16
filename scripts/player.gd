@@ -13,34 +13,31 @@ const STICK_ROTATION_BASE: float = 12.0
 const STICK_ROTATION_MAX: float = 40.0
 
 # --- HEALTH & DAMAGE ---
-@export var max_health: int = 5
+@export var max_health: int = 6
 var current_health: int
 
 var is_invincible: bool = false
 var invincibility_time: float = 1.0  # 1 second of safety after getting hit
 var invincibility_timer: float = 0.0
 
-@onready var sprite: Sprite2D = $Sprite2D  # Ensure your sprite node is named "Sprite2D"
+@onready var sprite: Sprite2D = $Sprite2D  
 
-# Tune this if the ship still faces the wrong direction:
-# PI / 2.0  = sprite faces UP in texture   (most likely for you)
-# 0.0       = sprite faces RIGHT in texture
-# PI        = sprite faces DOWN in texture
-# -PI / 2.0 = sprite faces LEFT in texture
 const SPRITE_OFFSET: float = PI / 2.0
 
 @export var bullet_scene: PackedScene
 @onready var muzzle_left: Marker2D = $MuzzleLeft
 @onready var muzzle_right: Marker2D = $MuzzleRight
 
-const FIRE_RATE: float = 0.15  # seconds between shots
+const FIRE_RATE: float = 0.15  
 var fire_timer: float = 0.0
 var fire_from_left: bool = true
 
 var aim_direction: Vector2 = Vector2.UP
 
+# --- PHYSICS SEPARATION ---
+var input_velocity: Vector2 = Vector2.ZERO
 var knockback_velocity: Vector2 = Vector2.ZERO
-
+var target_knockback: Vector2 = Vector2.ZERO  
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	rotation = aim_direction.angle() + SPRITE_OFFSET
@@ -48,13 +45,9 @@ func _ready() -> void:
 	health_changed.emit(current_health, max_health)
 
 func _input(event: InputEvent) -> void:
-	# If a Mouse or Keyboard is touched
 	if event is InputEventMouseMotion or event is InputEventMouseButton or event is InputEventKey:
 		input_mode = InputMode.KEYBOARD_MOUSE
-		
-	# If a Controller is touched
 	elif event is InputEventJoypadMotion or event is InputEventJoypadButton:
-		# Ignore tiny stick drifts so resting the controller doesn't override the mouse
 		if event is InputEventJoypadMotion and abs(event.axis_value) < STICK_DEADZONE:
 			return
 		input_mode = InputMode.CONTROLLER
@@ -66,13 +59,22 @@ func _physics_process(delta: float) -> void:
 			is_invincible = false
 			sprite.modulate = Color.WHITE
 
-	# The outdated _detect_input_mode() line has been removed from here!
-	
 	_handle_movement(delta)
+	
+	# IMPROVEMENT 1: Combine the two forces.
+	# Master velocity is now your engine power PLUS the bullet knockback
+	velocity = input_velocity + knockback_velocity
+	
 	_handle_aim(delta)
 	move_and_slide()
 	_wrap()
 	_handle_shoot(delta)
+	
+	# 1. The visual knockback smoothly accelerates toward the target (fixes the teleport)
+	knockback_velocity = knockback_velocity.lerp(target_knockback, 20.0 * delta)
+	
+	# 2. The target force rapidly decays to zero (the friction)
+	target_knockback = target_knockback.lerp(Vector2.ZERO, 12.0 * delta)
 	
 func _handle_shoot(delta: float) -> void:
 	fire_timer -= delta
@@ -86,26 +88,21 @@ func _fire() -> void:
 		
 	var bullet = bullet_scene.instantiate()
 	
-	# 1. Determine which muzzle to spawn the bullet from
 	var spawn_pos: Vector2
 	if fire_from_left:
 		spawn_pos = muzzle_left.global_position
 	else:
 		spawn_pos = muzzle_right.global_position
 		
-	# Toggle the boolean so the next shot comes from the other side
 	fire_from_left = !fire_from_left
 	
-	# 2. Find the Projectiles node in the main scene
 	var projectile_container = get_tree().current_scene.get_node_or_null("Projectiles")
 	
-	# 3. Safely add the bullet to the container (with a fallback just in case)
 	if projectile_container:
 		projectile_container.add_child(bullet)
 	else:
 		get_tree().current_scene.add_child(bullet)
 		
-	# 4. Initialize the bullet
 	bullet.init(spawn_pos, aim_direction)
 
 func _handle_movement(delta: float) -> void:
@@ -116,23 +113,18 @@ func _handle_movement(delta: float) -> void:
 	
 	var desired_velocity = direction * move_speed
 
-	# Smoothly blend the current velocity toward our desired velocity!
-	# (Lower this 10.0 to make it slide more like Asteroids, raise it to make it snappier)
-	velocity = velocity.lerp(desired_velocity, 10.0 * delta)
+	# IMPROVEMENT 3: Apply your input ONLY to the input_velocity variable, not master velocity
+	input_velocity = input_velocity.lerp(desired_velocity, 10.0 * delta)
 
 func _handle_aim(delta: float) -> void:
 	match input_mode:
 		InputMode.KEYBOARD_MOUSE:
-			# ALWAYS track the mouse. The crosshair is absolute.
 			aim_direction = global_position.direction_to(get_global_mouse_position())
-			
 			var target_angle: float = aim_direction.angle() + SPRITE_OFFSET
 			rotation = lerp_angle(rotation, target_angle, 25.0 * delta)
 
 		InputMode.CONTROLLER:
 			var stick := _get_aim_stick()
-			
-			# Only update aim_direction if the right stick is actually pushed
 			if stick.length() > STICK_DEADZONE:
 				aim_direction = stick.normalized()
 			
@@ -179,10 +171,9 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 	current_health -= amount
 	health_changed.emit(current_health, max_health)
 	
-	# 1. APPLY KNOCKBACK (Shove the player violently in the bullet's direction)
-	velocity += knockback_dir * 1500.0 
+	# IMPROVEMENT 4: Apply the massive push entirely to the separate knockback_velocity variable
+	knockback_velocity = knockback_dir * 1200.0 
 	
-	# 2. TRIGGER CAMERA SHAKE (We will create this node in the next step!)
 	var current_camera = get_viewport().get_camera_2d()
 	if current_camera and current_camera.has_method("apply_shake"):
 		current_camera.apply_shake(20.0)
@@ -198,5 +189,4 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 			tween.tween_property(sprite, "modulate", Color(1.0, 1.0, 1.0, 0.5), 0.2)
 
 func _die() -> void:
-	# For now, immediately reload the prototype level so you can keep testing!
 	get_tree().reload_current_scene()

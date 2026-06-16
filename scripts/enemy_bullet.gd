@@ -25,7 +25,7 @@ func _physics_process(delta: float) -> void:
 func _on_body_entered(body: Node) -> void:
 	# Check if the object we hit has the take_damage function (like our enemy does)
 	if body.has_method("take_damage"):
-		body.take_damage(damage)
-	
+		body.take_damage(damage, direction)	
+
 	# Destroy the bullet after it hits something
 	queue_free()

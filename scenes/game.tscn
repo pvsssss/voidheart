@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b3aufiksotxlg" path="res://scenes/bullet.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://dfx1w6qd4uq14" path="res://scenes/basic_fighter.tscn" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://dbsjrth07c14s" path="res://scenes/hud.tscn" id="7_u5sy4"]
+[ext_resource type="Script" uid="uid://bsby80k16rknb" path="res://scripts/wave_spawner.gd" id="9_0tnpc"]
 
 [node name="Game" type="Node2D" unique_id=476711454]
 script = ExtResource("1_gee14")
@@ -17,15 +18,12 @@ z_index = 5
 position = Vector2(138, 241)
 
 [node name="background" parent="." unique_id=1712399270 instance=ExtResource("2_lbhrr")]
-scale = Vector2(1.1, 1.1)
-scroll_offset = Vector2(0, -20)
 
 [node name="foreground" parent="." unique_id=1462943303 instance=ExtResource("3_iywne")]
-scale = Vector2(1.1, 1.1)
-scroll_offset = Vector2(-957, -20)
 
 [node name="Camera2D" parent="." unique_id=1487218477 instance=ExtResource("4_lbhrr")]
 position = Vector2(130, 250)
+zoom = Vector2(1.08, 1.08)
 position_smoothing_enabled = false
 rotation_smoothing_enabled = false
 
@@ -34,12 +32,10 @@ rotation_smoothing_enabled = false
 [node name="Bullet" parent="Projectiles" unique_id=890055396 instance=ExtResource("5_iywne")]
 position = Vector2(-22, -9)
 
-[node name="BasicFighter2" parent="." unique_id=790397415 instance=ExtResource("6_p57ef")]
-position = Vector2(333, 238)
-
-[node name="BasicFighter" parent="." unique_id=458251542 instance=ExtResource("6_p57ef")]
-position = Vector2(544, 111)
-
 [node name="HUD" parent="." unique_id=212364718 instance=ExtResource("7_u5sy4")]
 offset = Vector2(3, 3)
 transform = Transform2D(1, 0, 0, 1, 3, 3)
+
+[node name="WaveSpawner" type="Node" parent="." unique_id=1500104110]
+script = ExtResource("9_0tnpc")
+basic_fighter_scene = ExtResource("6_p57ef")

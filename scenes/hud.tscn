@@ -15,7 +15,7 @@ grow_horizontal = 2
 
 [node name="HealthBar" type="TextureProgressBar" parent="MarginContainer" unique_id=1469322163]
 layout_mode = 2
-max_value = 5.0
+max_value = 6.0
 texture_under = ExtResource("2_6fi6k")
 texture_over = ExtResource("3_047uy")
 texture_progress = ExtResource("4_5pdws")
