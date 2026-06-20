@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://qeidql6y6oht" path="res://scripts/basic_fighter.gd" id="1_0blki"]
 [ext_resource type="Texture2D" uid="uid://h62bcx8h3rrc" path="res://assets/Ship/5.png" id="2_iujc2"]
+[ext_resource type="PackedScene" uid="uid://bfvped2byr14r" path="res://scenes/xp_gem.tscn" id="2_mtkf0"]
 [ext_resource type="PackedScene" uid="uid://culpl1s5kvrwk" path="res://scenes/enemy_bullet.tscn" id="2_qdv2r"]
 [ext_resource type="AudioStream" uid="uid://dnioq0s1g25ne" path="res://assets/Sound/enemy die.wav" id="2_wlg5w"]
 
@@ -14,8 +15,10 @@ collision_layer = 2
 collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_0blki")
+xp_gem_scene = ExtResource("2_mtkf0")
 explosion_sound = ExtResource("2_wlg5w")
 speed = 120.0
+max_health = 2
 enemy_bullet_scene = ExtResource("2_qdv2r")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1324903092]

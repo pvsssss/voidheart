@@ -42,6 +42,8 @@ var fire_timer: float = 0.0
 var fire_from_left: bool = true
 
 var aim_direction: Vector2 = Vector2.UP
+@onready var crosshair: Sprite2D = $Crosshair
+@export var crosshair_radius: float = 256.0 # ADDED: Distance for gamepad crosshair orbit
 
 # --- PHYSICS SEPARATION ---
 var input_velocity: Vector2 = Vector2.ZERO
@@ -49,6 +51,7 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 var target_knockback: Vector2 = Vector2.ZERO  
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	screen_size = get_viewport_rect().size
 	global_position = screen_size / 2.0
 	rotation = aim_direction.angle() + SPRITE_OFFSET
@@ -71,7 +74,7 @@ func _physics_process(delta: float) -> void:
 		if invincibility_timer <= 0.0:
 			is_invincible = false
 			sprite.modulate = Color.WHITE
-
+			
 	_handle_movement(delta)
 	
 	# IMPROVEMENT 1: Combine the two forces.
@@ -89,6 +92,39 @@ func _physics_process(delta: float) -> void:
 	# 2. The target force rapidly decays to zero (the friction)
 	target_knockback = target_knockback.lerp(Vector2.ZERO, 12.0 * delta)
 	
+	# ADDED: Update crosshair position perfectly at the end of the frame
+	_update_crosshair()
+
+func _update_crosshair() -> void:
+	if not is_instance_valid(crosshair): return
+
+	var target_pos = Vector2.ZERO
+
+	if input_mode == InputMode.KEYBOARD_MOUSE:
+		# MOUSE MODE: Absolute freedom
+		target_pos = get_global_mouse_position()
+	else:
+		# GAMEPAD MODE: The 256px Orbit
+		# We use your existing aim_direction since _handle_aim() already tracks stick memory!
+		target_pos = global_position + (aim_direction * crosshair_radius)
+
+	# --- THE "SLIDING WALL" CLAMP ---
+	var camera = get_viewport().get_camera_2d()
+	if camera:
+		var visible_size = get_viewport_rect().size / camera.zoom
+		var cam_pos = camera.global_position
+		
+		# Add a tiny 10px margin so the crosshair doesn't perfectly touch the screen edge
+		var margin = 10.0
+		var half_w = (visible_size.x / 2.0) - margin
+		var half_h = (visible_size.y / 2.0) - margin
+		
+		# Clamp the crosshair strictly to the visible camera area
+		target_pos.x = clamp(target_pos.x, cam_pos.x - half_w, cam_pos.x + half_w)
+		target_pos.y = clamp(target_pos.y, cam_pos.y - half_h, cam_pos.y + half_h)
+
+	crosshair.global_position = target_pos
+
 func _handle_shoot(delta: float) -> void:
 	if is_dead:
 		return
@@ -194,7 +230,11 @@ func _wrap() -> void:
 
 	if wrapped:
 		global_position = pos
-		reset_physics_interpolation() # Excellent job including this, by the way!
+		reset_physics_interpolation() 
+		
+		# ADDED: This prevents the crosshair from smearing when you teleport!
+		if is_instance_valid(crosshair):
+			crosshair.reset_physics_interpolation()
 
 func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 	if is_invincible:
@@ -204,7 +244,7 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 	health_changed.emit(current_health, max_health)
 	hit_sound.play()
 	# IMPROVEMENT 4: Apply the massive push entirely to the separate knockback_velocity variable
-	knockback_velocity = knockback_dir * 1200.0 
+	knockback_velocity = knockback_dir * 1200.0  
 	
 	var current_camera = get_viewport().get_camera_2d()
 	if current_camera and current_camera.has_method("apply_shake"):
@@ -290,3 +330,9 @@ func _unhandled_input(_event: InputEvent) -> void:
 		# Let the player press their Shoot button to try again!
 		if Input.is_action_just_pressed("shoot"):
 			get_tree().reload_current_scene()
+
+
+func _on_magnet_area_area_entered(area: Area2D) -> void:
+	if area.has_method("magnetize_to"):
+		# Tell the gem to start flying toward us!
+		area.magnetize_to(self)

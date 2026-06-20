@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d3u7iutpl5xf4"]
+
+[ext_resource type="AudioStream" uid="uid://bou3hafxyntnm" path="res://assets/Music/leading_the_charge_loopable.wav" id="1_tn5dr"]
+
+[node name="MusicManager" type="AudioStreamPlayer" unique_id=1829455417]
+stream = ExtResource("1_tn5dr")
+volume_db = -8.057
+autoplay = true

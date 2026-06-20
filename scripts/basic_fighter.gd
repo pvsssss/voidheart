@@ -5,6 +5,7 @@ extends CharacterBody2D
 enum State { APPROACH, BURST, WAIT, CHARGE }
 var current_state: State = State.APPROACH
 
+@export var xp_gem_scene: PackedScene
 @export var explosion_sound: AudioStream  # Drag your explosion .wav file here!
 @export var speed: float = 180.0
 @export var max_health: int = 3
@@ -167,4 +168,19 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 	if current_health <= 0:
 		if explosion_sound:
 			SoundManager.play_sound(explosion_sound)
+		_drop_loot()
 		queue_free()
+		
+func _drop_loot() -> void:
+	if not xp_gem_scene:
+		return
+		
+	var gem = xp_gem_scene.instantiate()
+	gem.global_position = global_position # Drop it exactly where the enemy died
+	
+	# Throw it into the main world, NOT inside the enemy!
+	var loot_container = get_tree().current_scene.get_node_or_null("Loot")
+	if loot_container:
+		loot_container.call_deferred("add_child", gem)
+	else:
+		get_tree().current_scene.call_deferred("add_child", gem)

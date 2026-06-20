@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://caiwvrrpwiyqw" path="res://assets/Fx/explosion 2.png" id="7_fjrip"]
 [ext_resource type="FontFile" uid="uid://k8lu0j3gvo1m" path="res://assets/Bore Blasters 21.ttf" id="8_smehm"]
 [ext_resource type="FontFile" uid="uid://c4kabpa4xlj7j" path="res://assets/Not Jam UI 12.ttf" id="10_d2wvv"]
+[ext_resource type="Texture2D" uid="uid://cyy0f6mfougbt" path="res://assets/HUD/Crosshair17.png" id="10_y4r1p"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ur7pv"]
+light_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yqjtg"]
 radius = 13.038404
@@ -147,14 +151,33 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.34236452, 0.67241377, 1)
 colors = PackedColorArray(1, 0.8784314, 0.4, 1, 1, 0.4509804, 0, 1, 0.8509804, 0.08627451, 0, 1, 0.17, 0.17, 0.17, 0)
 
+[sub_resource type="Gradient" id="Gradient_ur7pv"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y4r1p"]
+gradient = SubResource("Gradient_ur7pv")
+width = 300
+height = 300
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y4r1p"]
+light_mode = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y4r1p"]
+radius = 160.0
+
 [node name="player" type="CharacterBody2D" unique_id=565558282 groups=["player"]]
 collision_mask = 10
 motion_mode = 1
 script = ExtResource("1_g2els")
-move_speed = 450.0
+move_speed = 550.0
 bullet_scene = ExtResource("2_dqkch")
+crosshair_radius = 150.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1241172193]
+material = SubResource("CanvasItemMaterial_ur7pv")
 texture = ExtResource("2_qhqgy")
 region_rect = Rect2(-0.5, -0.5, 0, 0)
 
@@ -262,3 +285,19 @@ scale_amount_min = 3.0
 scale_amount_max = 8.0
 scale_amount_curve = SubResource("Curve_ur7pv")
 color_ramp = SubResource("Gradient_y4r1p")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1411654640]
+texture = SubResource("GradientTexture2D_y4r1p")
+
+[node name="Crosshair" type="Sprite2D" parent="." unique_id=1254321114]
+top_level = true
+material = SubResource("CanvasItemMaterial_y4r1p")
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("10_y4r1p")
+
+[node name="MagnetArea" type="Area2D" parent="." unique_id=2154984]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagnetArea" unique_id=856451795]
+shape = SubResource("CircleShape2D_y4r1p")
+
+[connection signal="area_entered" from="MagnetArea" to="." method="_on_magnet_area_area_entered"]

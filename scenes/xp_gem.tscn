@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://bfvped2byr14r"]
+
+[ext_resource type="Script" uid="uid://b5mge0g4ejawf" path="res://scripts/xp_gem.gd" id="1_srbn3"]
+[ext_resource type="Texture2D" uid="uid://unvtrbldpjta" path="res://assets/Item/Gem2.png" id="2_srbn3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x7fs0"]
+atlas = ExtResource("2_srbn3")
+region = Rect2(0, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rri22"]
+atlas = ExtResource("2_srbn3")
+region = Rect2(21, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4g2w"]
+atlas = ExtResource("2_srbn3")
+region = Rect2(42, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gsjha"]
+atlas = ExtResource("2_srbn3")
+region = Rect2(63, 0, 21, 21)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f76uh"]
+animations = [{
+"frames": [{
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_x7fs0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rri22")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4g2w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gsjha")
+}, {
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_x7fs0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="XPGem" type="Area2D" unique_id=1799121639]
+scale = Vector2(0.9, 0.9)
+script = ExtResource("1_srbn3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=191139202]
+scale = Vector2(0.9, 0.9)
+sprite_frames = SubResource("SpriteFrames_f76uh")
+autoplay = "default"
+frame_progress = 0.06718578
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1872494152]
+polygon = PackedVector2Array(0, -10, 5.555556, -4.4444447, 10, -4.4444447, 10, 0, 7.777778, 2.2222223, 7.777778, 10, 5.555556, 10, 0, 8.888889, -3.3333335, 10, -7.777778, 10, -7.777778, 2.2222223, -10, 0, -10, -4.4444447, -5.555556, -4.4444447)
