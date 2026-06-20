@@ -5,9 +5,147 @@
 [ext_resource type="Texture2D" uid="uid://b4ctmvtji46ib" path="res://assets/Ship/player.png" id="2_qhqgy"]
 [ext_resource type="AudioStream" uid="uid://bhiclwbhyggpv" path="res://assets/Sound/laserShoot.wav" id="4_qlg0r"]
 [ext_resource type="AudioStream" uid="uid://5wnbwarjv7xv" path="res://assets/Sound/hitHurt.wav" id="5_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://csscneg56if5t" path="res://assets/Fx/Sprites.png" id="6_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://caiwvrrpwiyqw" path="res://assets/Fx/explosion 2.png" id="7_fjrip"]
+[ext_resource type="FontFile" uid="uid://k8lu0j3gvo1m" path="res://assets/Bore Blasters 21.ttf" id="8_smehm"]
+[ext_resource type="FontFile" uid="uid://c4kabpa4xlj7j" path="res://assets/Not Jam UI 12.ttf" id="10_d2wvv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yqjtg"]
 radius = 13.038404
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4r1p"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2wvv"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3v2ag"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jej6c"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
+atlas = ExtResource("6_tuyoq")
+region = Rect2(336, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oprun"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8ls1"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfm1y"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fulsm"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4r5pv"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_60mlk"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
+atlas = ExtResource("7_fjrip")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oprun"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjrip")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smehm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ur7pv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y4r1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2wvv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3v2ag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jej6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1ej7")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oprun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a8ls1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfm1y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fulsm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4r5pv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_60mlk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i4ail")
+}],
+"loop": false,
+"name": &"explosion 2",
+"speed": 12.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"explosion 3",
+"speed": 5.0
+}]
+
+[sub_resource type="Curve" id="Curve_ur7pv"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_y4r1p"]
+offsets = PackedFloat32Array(0, 0.34236452, 0.67241377, 1)
+colors = PackedColorArray(1, 0.8784314, 0.4, 1, 1, 0.4509804, 0, 1, 0.8509804, 0.08627451, 0, 1, 0.17, 0.17, 0.17, 0)
 
 [node name="player" type="CharacterBody2D" unique_id=565558282 groups=["player"]]
 collision_mask = 10
@@ -37,3 +175,90 @@ volume_db = -9.115
 [node name="HitSound" type="AudioStreamPlayer" parent="." unique_id=583779676]
 stream = ExtResource("5_qlg0r")
 volume_db = -7.373
+
+[node name="ExplosionAnim" type="AnimatedSprite2D" parent="." unique_id=295717720]
+visible = false
+rotation = 0.51330155
+sprite_frames = SubResource("SpriteFrames_oprun")
+
+[node name="GameOverUI" type="CanvasLayer" parent="." unique_id=1302458111]
+visible = false
+
+[node name="FadeContainer" type="Control" parent="GameOverUI" unique_id=1202843415]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="GameOverUI/FadeContainer" unique_id=853965791]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.23137255)
+
+[node name="GameOver" type="Label" parent="GameOverUI/FadeContainer" unique_id=1239405579]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -234.5
+offset_top = -16.5
+offset_right = 234.5
+offset_bottom = 16.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(234.5, 16.5)
+theme_override_colors/font_color = Color(0.89, 0.84253335, 0.17799999, 0.8862745)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.92156863)
+theme_override_fonts/font = ExtResource("8_smehm")
+theme_override_font_sizes/font_size = 42
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartPrompt" type="Label" parent="GameOverUI/FadeContainer" unique_id=934598286]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.5
+offset_top = 31.554993
+offset_right = 140.5
+offset_bottom = 47.555298
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.89, 0.84253335, 0.17799999, 0.8862745)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.92156863)
+theme_override_fonts/font = ExtResource("10_d2wvv")
+theme_override_font_sizes/font_size = 16
+text = "PRESS [SHOOT] TO RESTART"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeathBurst" type="CPUParticles2D" parent="." unique_id=1254907812]
+emitting = false
+amount = 80
+lifetime = 0.7
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.4
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, -20)
+initial_velocity_min = 300.0
+initial_velocity_max = 500.0
+damping_min = 600.0
+damping_max = 600.0
+scale_amount_min = 3.0
+scale_amount_max = 8.0
+scale_amount_curve = SubResource("Curve_ur7pv")
+color_ramp = SubResource("Gradient_y4r1p")

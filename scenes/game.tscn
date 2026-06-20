@@ -15,22 +15,27 @@ script = ExtResource("1_gee14")
 
 [node name="player" parent="." unique_id=565558282 instance=ExtResource("1_lnu2h")]
 z_index = 5
-position = Vector2(138, 241)
 
 [node name="background" parent="." unique_id=1712399270 instance=ExtResource("2_lbhrr")]
+texture_repeat = 2
+repeat_size = Vector2(960, 480)
+repeat_times = 3
 
 [node name="foreground" parent="." unique_id=1462943303 instance=ExtResource("3_iywne")]
+texture_repeat = 2
+repeat_size = Vector2(960, 480)
+repeat_times = 3
 
 [node name="Camera2D" parent="." unique_id=1487218477 instance=ExtResource("4_lbhrr")]
 position = Vector2(130, 250)
-zoom = Vector2(1.08, 1.08)
+zoom = Vector2(0.8, 0.8)
 position_smoothing_enabled = false
 rotation_smoothing_enabled = false
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=1076277030]
 
 [node name="Bullet" parent="Projectiles" unique_id=890055396 instance=ExtResource("5_iywne")]
-position = Vector2(-22, -9)
+position = Vector2(-64, -151)
 
 [node name="HUD" parent="." unique_id=212364718 instance=ExtResource("7_u5sy4")]
 offset = Vector2(3, 3)

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dnioq0s1g25ne"
+path="res://.godot/imported/enemy die.wav-5704a9ec54ee9a8f83c5dc728a90f91c.sample"
+
+[deps]
+
+source_file="res://assets/Sound/enemy die.wav"
+dest_files=["res://.godot/imported/enemy die.wav-5704a9ec54ee9a8f83c5dc728a90f91c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

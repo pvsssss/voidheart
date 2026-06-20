@@ -5,6 +5,7 @@ extends CharacterBody2D
 enum State { APPROACH, BURST, WAIT, CHARGE }
 var current_state: State = State.APPROACH
 
+@export var explosion_sound: AudioStream  # Drag your explosion .wav file here!
 @export var speed: float = 180.0
 @export var max_health: int = 3
 @export var enemy_bullet_scene: PackedScene 
@@ -33,6 +34,16 @@ func _ready() -> void:
 	# They start in the APPROACH state automatically now, no timer needed here!
 
 func _physics_process(delta: float) -> void:
+	if not is_instance_valid(player):
+		player = get_tree().get_first_node_in_group("player")
+		if not player:
+			return
+			
+	if player.is_dead:
+		velocity = velocity.lerp(Vector2.ZERO, 3.0 * delta)
+		move_and_slide()
+		return
+		
 	if not player:
 		player = get_tree().get_first_node_in_group("player")
 		return
@@ -154,4 +165,6 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 	burst_shots_fired = 0
 	
 	if current_health <= 0:
+		if explosion_sound:
+			SoundManager.play_sound(explosion_sound)
 		queue_free()

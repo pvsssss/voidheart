@@ -3,7 +3,6 @@ extends Node
 @export var basic_fighter_scene: PackedScene
 
 var current_wave: int = 0
-var screen_size: Vector2
 
 # --- WAVE MANAGEMENT VARIABLES ---
 var enemies_left_in_wave: int = 0
@@ -14,10 +13,12 @@ var time_between_spawns: float = 1.0 # Wait 1 second between dropping new enemie
 var is_between_waves: bool = true
 
 func _ready() -> void:
-	screen_size = get_viewport().get_visible_rect().size
 	_start_next_wave()
 
 func _process(delta: float) -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.is_dead:
+		return
 	# If we are resting between waves, do absolutely nothing
 	if is_between_waves:
 		return
@@ -65,15 +66,31 @@ func _spawn_enemy() -> void:
 		
 	var enemy = basic_fighter_scene.instantiate()
 	
+	# --- ZOOM-AWARE CAMERA MATH ---
+	var camera = get_viewport().get_camera_2d()
+	if not camera:
+		return
+		
+	# Calculate the true visible area with zoom
+	var visible_size = get_viewport().get_visible_rect().size / camera.zoom
+	var cam_pos = camera.global_position
+	
+	# Add a "buffer" so they spawn completely out of sight
+	var buffer = 100.0 
+	
+	var left_edge = cam_pos.x - (visible_size.x / 2.0) - buffer
+	var right_edge = cam_pos.x + (visible_size.x / 2.0) + buffer
+	var top_edge = cam_pos.y - (visible_size.y / 2.0) - buffer
+	var bottom_edge = cam_pos.y + (visible_size.y / 2.0) + buffer
+	
 	var spawn_pos = Vector2.ZERO
 	var edge = randi() % 4 
-	var offset = 50.0
 	
 	match edge:
-		0: spawn_pos = Vector2(randf_range(0, screen_size.x), -offset)
-		1: spawn_pos = Vector2(randf_range(0, screen_size.x), screen_size.y + offset)
-		2: spawn_pos = Vector2(-offset, randf_range(0, screen_size.y))
-		3: spawn_pos = Vector2(screen_size.x + offset, randf_range(0, screen_size.y))
+		0: spawn_pos = Vector2(randf_range(left_edge, right_edge), top_edge)
+		1: spawn_pos = Vector2(randf_range(left_edge, right_edge), bottom_edge)
+		2: spawn_pos = Vector2(left_edge, randf_range(top_edge, bottom_edge))
+		3: spawn_pos = Vector2(right_edge, randf_range(top_edge, bottom_edge))
 			
 	enemy.global_position = spawn_pos
 	get_parent().add_child(enemy)
